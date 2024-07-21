@@ -1,19 +1,51 @@
 {% extends 'base.html' %}
 
+{% block title %}Dashboard{% endblock %}
+
 {% block content %}
-<h2>Dashboard</h2>
-<h3>Incomes</h3>
+<h1>Dashboard</h1>
+<p>Current Balance: {{ balance }}</p>
+
+<h2>Add Transaction</h2>
+<a href="{% url 'add_transaction' %}">Add Transaction</a>
+
+<h2>Weekly Stats</h2>
+<p>Total: {{ weekly_total }}</p>
+
+<h2>Monthly Stats</h2>
+<p>Total: {{ monthly_total }}</p>
+
+<h2>Yearly Stats</h2>
+<p>Total: {{ yearly_total }}</p>
+
+<h2>Transactions</h2>
 <ul>
-    {% for income in incomes %}
-    <li>{{ income.amount }} {{ income.currency.symbol }} on {{ income.date }} - {{ income.description }}</li>
+    {% for transaction in transactions %}
+    <li>{{ transaction.date }} - {{ transaction.amount }} {{ transaction.currency }} - {{ transaction.transaction_type
+        }} - {{ transaction.description }}
+    </li>
     {% endfor %}
 </ul>
-<h3>Expenses</h3>
-<ul>
-    {% for expense in expenses %}
-    <li>{{ expense.amount }} {{ expense.currency.symbol }} on {{ expense.date }} - {{ expense.description }}</li>
-    {% endfor %}
-</ul>
-<a href="{% url 'add_income' %}">Add Income</a>
-<a href="{% url 'add_expense' %}">Add Expense</a>
+
+<div id="calendar"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"/>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [
+                {% for transaction in transactions %}
+                {
+                    title: '{{ transaction.amount }} {{ transaction.currency }} - {{ transaction.transaction_type }}',
+                    start: '{{ transaction.date }}',
+                    description: '{{ transaction.description }}'
+                },
+                {% endfor %}
+            ]
+        });
+        calendar.render();
+    });
+</script>
 {% endblock %}
