@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<h3>Incomes</h3>
+<ul>
+    {% for income in incomes %}
+    <li>{{ income.amount }} {{ income.currency.symbol }} on {{ income.date }} - {{ income.description }}</li>
+    {% endfor %}
+</ul>
+<h3>Expenses</h3>
+<ul>
+    {% for expense in expenses %}
+    <li>{{ expense.amount }} {{ expense.currency.symbol }} on {{ expense.date }} - {{ expense.description }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'add_income' %}">Add Income</a>
+<a href="{% url 'add_expense' %}">Add Expense</a>
+{% endblock %}
