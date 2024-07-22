@@ -1,51 +1,28 @@
-{% extends 'base.html' %}
-
-{% block title %}Dashboard{% endblock %}
-
+{% extends "base.html" %}
 {% block content %}
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
 <h1>Dashboard</h1>
-<p>Current Balance: {{ balance }}</p>
+<p>Balance: {{ balance }}</p>
+<p>Weekly Total: {{ weekly_total }}</p>
+<p>Monthly Total: {{ monthly_total }}</p>
+<p>Yearly Total: {{ yearly_total }}</p>
 
-<h2>Add Transaction</h2>
-<a href="{% url 'add_transaction' %}">Add Transaction</a>
+<h2>Actions</h2>
+<a href="{% url 'add_income' %}">Add Income</a>
+<a href="{% url 'add_expense' %}">Add Expense</a>
 
-<h2>Weekly Stats</h2>
-<p>Total: {{ weekly_total }}</p>
+<h2>Statistics</h2>
+<a href="{% url 'income_stats' 'weekly' %}">Weekly Income Stats</a>
+<a href="{% url 'income_stats' 'monthly' %}">Monthly Income Stats</a>
+<a href="{% url 'income_stats' 'yearly' %}">Yearly Income Stats</a>
 
-<h2>Monthly Stats</h2>
-<p>Total: {{ monthly_total }}</p>
-
-<h2>Yearly Stats</h2>
-<p>Total: {{ yearly_total }}</p>
-
-<h2>Transactions</h2>
-<ul>
-    {% for transaction in transactions %}
-    <li>{{ transaction.date }} - {{ transaction.amount }} {{ transaction.currency }} - {{ transaction.transaction_type
-        }} - {{ transaction.description }}
-    </li>
-    {% endfor %}
-</ul>
-
-<div id="calendar"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"/>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: [
-                {% for transaction in transactions %}
-                {
-                    title: '{{ transaction.amount }} {{ transaction.currency }} - {{ transaction.transaction_type }}',
-                    start: '{{ transaction.date }}',
-                    description: '{{ transaction.description }}'
-                },
-                {% endfor %}
-            ]
-        });
-        calendar.render();
-    });
-</script>
-{% endblock %}
+<a href="{% url 'expense_stats' 'weekly' %}">Weekly Expense Stats</a>
+<a href="{% url 'expense_stats' 'monthly' %}">Monthly Expense Stats</a>
+<a href="{% url 'expense_stats' 'yearly' %}">Yearly Expense Stats</a>
+</body>
+</html>
+{% endblock content %}

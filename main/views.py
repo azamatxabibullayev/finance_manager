@@ -66,14 +66,52 @@ def add_expense(request):
 
 
 @login_required
-def add_transaction(request):
-    if request.method == 'POST':
-        form = TransactionForm(request.POST)
-        if form.is_valid():
-            transaction = form.save(commit=False)
-            transaction.user = request.user
-            transaction.save()
-            return redirect('dashboard')
+def income_stats(request, period):
+    today = timezone.now().date()
+    if period == 'weekly':
+        start_period = today - timedelta(days=today.weekday())
+        end_period = start_period + timedelta(days=6)
+    elif period == 'monthly':
+        start_period = today.replace(day=1)
+        end_period = today.replace(day=calendar.monthrange(today.year, today.month)[1])
+    elif period == 'yearly':
+        start_period = today.replace(month=1, day=1)
+        end_period = today.replace(month=12, day=31)
     else:
-        form = TransactionForm()
-    return render(request, 'main/add_transaction.html', {'form': form})
+        return redirect('dashboard')
+
+    incomes = Income.objects.filter(user=request.user, date__range=[start_period, end_period])
+    total_income = incomes.aggregate(Sum('amount'))['amount__sum'] or 0.00
+
+    context = {
+        'incomes': incomes,
+        'total_income': total_income,
+        'period': period,
+    }
+    return render(request, 'main/income_stats.html', context)
+
+
+@login_required
+def expense_stats(request, period):
+    today = timezone.now().date()
+    if period == 'weekly':
+        start_period = today - timedelta(days=today.weekday())
+        end_period = start_period + timedelta(days=6)
+    elif period == 'monthly':
+        start_period = today.replace(day=1)
+        end_period = today.replace(day=calendar.monthrange(today.year, today.month)[1])
+    elif period == 'yearly':
+        start_period = today.replace(month=1, day=1)
+        end_period = today.replace(month=12, day=31)
+    else:
+        return redirect('dashboard')
+
+    expenses = Expense.objects.filter(user=request.user, date__range=[start_period, end_period])
+    total_expense = expenses.aggregate(Sum('amount'))['amount__sum'] or 0.00
+
+    context = {
+        'expenses': expenses,
+        'total_expense': total_expense,
+        'period': period,
+    }
+    return render(request, 'main/expense_stats.html', context)

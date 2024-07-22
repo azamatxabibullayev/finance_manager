@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+<html>
+<head>
+    <title>{{ period|capfirst }} Income Stats</title>
+</head>
+{% block content %}
+<body>
+<h1>{{ period|capfirst }} Income Stats</h1>
+<p>Total Income: {{ total_income }}</p>
+<ul>
+    {% for income in incomes %}
+    <li>{{ income.date }}: {{ income.amount }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+</body>
+</html>
+{% endblock content %}

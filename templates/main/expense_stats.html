@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+<html>
+<head>
+    <title>{{ period|capfirst }} Expense Stats</title>
+</head>
+{% block content %}
+<body>
+<h1>{{ period|capfirst }} Expense Stats</h1>
+<p>Total Expense: {{ total_expense }}</p>
+<ul>
+    {% for expense in expenses %}
+    <li>{{ expense.date }}: {{ expense.amount }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+</body>
+</html>
