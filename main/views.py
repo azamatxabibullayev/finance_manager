@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Income, Expense, IncomeType, ExpenseType, Currency, CurrencyType, Transaction, Balance
-from .forms import IncomeForm, ExpenseForm, TransactionForm
+from .models import Income, Expense, Transaction, Balance
+from .forms import IncomeForm, ExpenseForm
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta, date
 import calendar
