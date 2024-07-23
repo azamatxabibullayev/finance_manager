@@ -112,10 +112,14 @@ def income_stats(request, period):
     incomes = Income.objects.filter(user=request.user, date__range=[start_period, end_period])
     total_income = incomes.aggregate(Sum('amount'))['amount__sum'] or 0.00
 
+    # Group incomes by type and calculate total for each type
+    incomes_by_type = incomes.values('income_type__name').annotate(total=Sum('amount')).order_by('-total')
+
     context = {
         'incomes': incomes,
         'total_income': total_income,
         'period': period,
+        'incomes_by_type': incomes_by_type,  # Add this to the context
     }
     return render(request, 'main/income_stats.html', context)
 
@@ -137,10 +141,11 @@ def expense_stats(request, period):
 
     expenses = Expense.objects.filter(user=request.user, date__range=[start_period, end_period])
     total_expense = expenses.aggregate(Sum('amount'))['amount__sum'] or 0.00
-
+    expenses_by_type = expenses.values('expense_type__name').annotate(total=Sum('amount')).order_by('-total')
     context = {
         'expenses': expenses,
         'total_expense': total_expense,
         'period': period,
+        'expenses_by_type': expenses_by_type,
     }
     return render(request, 'main/expense_stats.html', context)
