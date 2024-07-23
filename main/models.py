@@ -50,7 +50,7 @@ class Income(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.IntegerField()
     date = models.DateField()
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
     income_type = models.ForeignKey(IncomeType, on_delete=models.SET_NULL, null=True)
 
@@ -62,7 +62,7 @@ class Expense(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.IntegerField()
     date = models.DateField()
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
     expense_type = models.ForeignKey(ExpenseType, on_delete=models.SET_NULL, null=True)
 
@@ -96,6 +96,6 @@ class Transaction(models.Model):
 
 class Balance(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()
     date = models.DateField(default=timezone.now)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)

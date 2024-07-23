@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Income, Expense, Transaction, Balance
+from .models import Income, Expense, Transaction, Balance, Currency, CurrencyType
 from .forms import IncomeForm, ExpenseForm
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta, date
@@ -12,7 +12,18 @@ import json
 @login_required
 def dashboard(request):
     transactions = Transaction.objects.filter(user=request.user)
-    balance = Balance.objects.filter(user=request.user).aggregate(Sum('amount'))['amount__sum'] or 0.00
+
+    # Calculate balance for each currency type
+    balance_cash = Balance.objects.filter(
+        user=request.user, currency__type__type=CurrencyType.CASH
+    ).aggregate(Sum('amount'))['amount__sum'] or 0.00
+
+    balance_card = Balance.objects.filter(
+        user=request.user, currency__type__type=CurrencyType.CARD
+    ).aggregate(Sum('amount'))['amount__sum'] or 0.00
+
+    # Calculate overall balance
+    overall_balance = balance_cash + balance_card
 
     today = timezone.now().date()
     start_week = today - timedelta(days=today.weekday())
@@ -53,7 +64,9 @@ def dashboard(request):
 
     context = {
         'transactions': transactions,
-        'balance': balance,
+        'balance_cash': balance_cash,
+        'balance_card': balance_card,
+        'overall_balance': overall_balance,
         'weekly_total': weekly_total,
         'monthly_total': monthly_total,
         'yearly_total': yearly_total,
@@ -74,6 +87,7 @@ def add_income(request):
             income = form.save(commit=False)
             income.user = request.user
             income.save()
+            Balance.objects.create(user=request.user, amount=income.amount, date=income.date, currency=income.currency)
             return redirect('dashboard')
     else:
         form = IncomeForm()
@@ -88,6 +102,8 @@ def add_expense(request):
             expense = form.save(commit=False)
             expense.user = request.user
             expense.save()
+            Balance.objects.create(user=request.user, amount=-expense.amount, date=expense.date,
+                                   currency=expense.currency)
             return redirect('dashboard')
     else:
         form = ExpenseForm()
