@@ -6,6 +6,8 @@ from datetime import timedelta, date
 import calendar
 from django.db.models import Sum
 from django.utils import timezone
+import json
+from decimal import Decimal
 
 
 @login_required
@@ -27,12 +29,47 @@ def dashboard(request):
     monthly_total = monthly_transactions.aggregate(Sum('amount'))['amount__sum'] or 0.00
     yearly_total = yearly_transactions.aggregate(Sum('amount'))['amount__sum'] or 0.00
 
+    # Calculate expenses
+    weekly_expenses = \
+        Expense.objects.filter(user=request.user, date__range=[start_week, end_week]).aggregate(Sum('amount'))[
+            'amount__sum'] or 0.00
+    monthly_expenses = Expense.objects.filter(user=request.user, date__month=today.month).aggregate(Sum('amount'))[
+                           'amount__sum'] or 0.00
+    yearly_expenses = Expense.objects.filter(user=request.user, date__year=today.year).aggregate(Sum('amount'))[
+                          'amount__sum'] or 0.00
+
+    # Get data for the past 12 months
+    incomes_last_12_months = []
+    expenses_last_12_months = []
+    for i in range(12):
+        month = today.month - i
+        year = today.year
+        if month <= 0:
+            month += 12
+            year -= 1
+        monthly_income = \
+            Income.objects.filter(user=request.user, date__year=year, date__month=month).aggregate(Sum('amount'))[
+                'amount__sum'] or 0.00
+        monthly_expense = \
+            Expense.objects.filter(user=request.user, date__year=year, date__month=month).aggregate(Sum('amount'))[
+                'amount__sum'] or 0.00
+        incomes_last_12_months.append(monthly_income)
+        expenses_last_12_months.append(monthly_expense)
+
+    incomes_last_12_months.reverse()
+    expenses_last_12_months.reverse()
+
     context = {
         'transactions': transactions,
         'balance': balance,
         'weekly_total': weekly_total,
         'monthly_total': monthly_total,
         'yearly_total': yearly_total,
+        'weekly_expenses': weekly_expenses,
+        'monthly_expenses': monthly_expenses,
+        'yearly_expenses': yearly_expenses,
+        'incomes_last_12_months': json.dumps(incomes_last_12_months),
+        'expenses_last_12_months': json.dumps(expenses_last_12_months),
     }
     return render(request, 'main/dashboard.html', context)
 

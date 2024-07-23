@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+    <title>{% block title %}Profile {% endblock %} </title>
+
+{% block content %}
+    <div >
+        <img src="{{user.image.url}}" alt="Your image" height="100px">
+        <h2>Username: {{user.username}}</h2>
+        <h3>Email: {{ user.email }}</h3>
+        <h3>First Name: {{ user.first_name }}</h3>
+        <h3>Last Name: {{ user.last_name }}</h3>
+        <button>
+            <a href="{% url 'users:edit_profile' %}">Edit Profile</a>
+        </button>
+    </div>
+
+{% endblock content %}

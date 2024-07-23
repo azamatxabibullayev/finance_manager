@@ -48,7 +48,7 @@ class ExpenseType(models.Model):
 
 class Income(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()
     date = models.DateField()
     description = models.TextField()
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)
@@ -60,7 +60,7 @@ class Income(models.Model):
 
 class Expense(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()
     date = models.DateField()
     description = models.TextField()
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True)

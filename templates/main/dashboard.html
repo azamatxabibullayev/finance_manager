@@ -1,21 +1,80 @@
 {% extends "base.html" %}
+{% block title %}Dashboard{% endblock title %}
 {% block content %}
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
-<h1>Dashboard</h1>
-<p>Balance: {{ balance }}</p>
-<p>Weekly Total: {{ weekly_total }}</p>
-<p>Monthly Total: {{ monthly_total }}</p>
-<p>Yearly Total: {{ yearly_total }}</p>
+<div class="content">
+    <h1>Dashboard</h1>
+    <p>Balance: {{ balance }}</p>
 
-<h2>Actions</h2>
-<a href="{% url 'add_income' %}">Add Income</a>
-<a href="{% url 'add_expense' %}">Add Expense</a>
+    <h2>Expenses</h2>
+    <p>Weekly Expenses: {{ weekly_expenses }}</p>
+    <p>Monthly Expenses: {{ monthly_expenses }}</p>
+    <p>Yearly Expenses: {{ yearly_expenses }}</p>
+
+    <h2>Actions</h2>
+    <a href="{% url 'add_income' %}">Add Income</a>
+    <a href="{% url 'add_expense' %}">Add Expense</a>
+
+    <h2>Graphs</h2>
+    <div class="chart-container">
+        <canvas id="incomeChart" width="400" height="400"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="expenseChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+<script>
+    const incomesLast12Months = {{ incomes_last_12_months|safe }};
+    const expensesLast12Months = {{ expenses_last_12_months|safe }};
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 
-</body>
-</html>
+    const incomeCtx = document.getElementById('incomeChart').getContext('2d');
+    const incomeChart = new Chart(incomeCtx, {
+        type: 'line',
+        data: {
+            labels: months.slice(0, incomesLast12Months.length),
+            datasets: [{
+                label: 'Income in the Last 12 Months',
+                data: incomesLast12Months,
+                borderColor: '#36a2eb',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            width: 400,
+            height: 400
+        }
+    });
+
+
+    const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+    const expenseChart = new Chart(expenseCtx, {
+        type: 'line',
+        data: {
+            labels: months.slice(0, expensesLast12Months.length),
+            datasets: [{
+                label: 'Expenses in the Last 12 Months',
+                data: expensesLast12Months,
+                borderColor: '#ff6384',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            width: 400,
+            height: 400
+        }
+    });
+</script>
+<style>
+    .chart-container {
+        width: 100%;
+        max-width: 400px;
+        margin: 20px auto;
+    }
+</style>
 {% endblock content %}
