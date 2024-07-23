@@ -26,14 +26,21 @@
 <script>
     const incomesLast12Months = {{ incomes_last_12_months|safe }};
     const expensesLast12Months = {{ expenses_last_12_months|safe }};
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const today = new Date();
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+        months.push(new Date(today.getFullYear(), today.getMonth() - i, 1).toLocaleString('default', { month: 'short' }));
+    }
+    months.reverse();
 
+    console.log("Incomes Last 12 Months: ", incomesLast12Months);
+    console.log("Expenses Last 12 Months: ", expensesLast12Months);
 
     const incomeCtx = document.getElementById('incomeChart').getContext('2d');
     const incomeChart = new Chart(incomeCtx, {
         type: 'line',
         data: {
-            labels: months.slice(0, incomesLast12Months.length),
+            labels: months,
             datasets: [{
                 label: 'Income in the Last 12 Months',
                 data: incomesLast12Months,
@@ -44,17 +51,23 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            width: 400,
-            height: 400
+            scales: {
+                x: {
+                    type: 'category',
+                    labels: months
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
-
 
     const expenseCtx = document.getElementById('expenseChart').getContext('2d');
     const expenseChart = new Chart(expenseCtx, {
         type: 'line',
         data: {
-            labels: months.slice(0, expensesLast12Months.length),
+            labels: months,
             datasets: [{
                 label: 'Expenses in the Last 12 Months',
                 data: expensesLast12Months,
@@ -65,8 +78,15 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            width: 400,
-            height: 400
+            scales: {
+                x: {
+                    type: 'category',
+                    labels: months
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
 </script>
