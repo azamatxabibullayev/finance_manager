@@ -130,19 +130,20 @@
         {% if not request.user.is_authenticated %}
         <a href="{% url 'home:landing_page' %}">Home</a>
         <a href="{% url 'users:register' %}">Register</a>
-        <a href="{% url 'users:login' %}">Login</a>
+        <a href="{% url 'users:login' %}">Kirish</a>
         {% else %}
         <a href="{% url 'dashboard' %}">Dashboard</a>
-        <a href="{% url 'add_income' %}">Add Income</a>
-        <a href="{% url 'add_expense' %}">Add Expense</a>
-        <a href="{% url 'income_stats' 'weekly' %}">Weekly Income Stats</a>
-        <a href="{% url 'income_stats' 'monthly' %}">Monthly Income Stats</a>
-        <a href="{% url 'income_stats' 'yearly' %}">Yearly Income Stats</a>
-        <a href="{% url 'expense_stats' 'weekly' %}">Weekly Expense Stats</a>
-        <a href="{% url 'expense_stats' 'monthly' %}">Monthly Expense Stats</a>
-        <a href="{% url 'expense_stats' 'yearly' %}">Yearly Expense Stats</a>
+        <a href="{% url 'add_income' %}">Daromad qo'shish</a>
+        <a href="{% url 'add_expense' %}">Xarajat qo'shish</a>
+        <a href="{% url 'stats' %}">Statistika</a>
+        <a href="{% url 'income_stats' 'weekly' %}">Xaftalik daromad statistikasi</a>
+        <a href="{% url 'income_stats' 'monthly' %}">Oylik daromad statistikasi</a>
+        <a href="{% url 'income_stats' 'yearly' %}">Yillik daromad statistikasi</a>
+        <a href="{% url 'expense_stats' 'weekly' %}">Xaftalik xarajat statistikasi</a>
+        <a href="{% url 'expense_stats' 'monthly' %}">Oylik xarajat statistikasi</a>
+        <a href="{% url 'expense_stats' 'yearly' %}">Yillik xarajat statistikasi</a>
         <a href="{% url 'users:profile' %}">Profile</a>
-        <a href="{% url 'users:logout' %}">Logout</a>
+        <a href="{% url 'users:logout' %}">Chiqish</a>
         {% endif %}
     </nav>
 </div>

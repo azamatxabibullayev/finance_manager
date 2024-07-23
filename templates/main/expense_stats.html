@@ -3,15 +3,14 @@
 {% block content %}
 <div class="content">
     <h1>{{ period|capfirst }} Expense Stats</h1>
-    <p>Total Expense: {{ total_expense }}</p>
+    <p>Umumiy xarajat: {{ total_expense }}</p>
 
-    <!-- Display expense data in a table -->
-    <h2>Expense Data</h2>
+    <h2>Xarajatlar</h2>
     <table>
         <thead>
         <tr>
             <th>Date</th>
-            <th>Type</th>
+            <th>Category</th>
             <th>Amount</th>
         </tr>
         </thead>
@@ -26,12 +25,12 @@
         </tbody>
     </table>
 
-    <!-- Display total expenses by type in a table -->
-    <h2>Expenses by Type</h2>
+
+    <h2>Kategoriya bo'yicha xarajatlar</h2>
     <table>
         <thead>
         <tr>
-            <th>Type</th>
+            <th>Category</th>
             <th>Total Amount</th>
         </tr>
         </thead>

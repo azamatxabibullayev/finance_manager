@@ -7,16 +7,16 @@
     <p>Balance (Card): {{ balance_card }}</p>
     <p>Overall Balance: {{ overall_balance }}</p>
 
-    <h2>Expenses</h2>
-    <p>Weekly Expenses: {{ weekly_expenses }}</p>
-    <p>Monthly Expenses: {{ monthly_expenses }}</p>
-    <p>Yearly Expenses: {{ yearly_expenses }}</p>
+    <h2>Xarajatlar</h2>
+    <p>Haftalik xarajatlar: {{ weekly_expenses }}</p>
+    <p>Oylik xarajatlar: {{ monthly_expenses }}</p>
+    <p>Yillik xarajatlar: {{ yearly_expenses }}</p>
 
     <h2>Actions</h2>
-    <a href="{% url 'add_income' %}">Add Income</a>
-    <a href="{% url 'add_expense' %}">Add Expense</a>
+    <a href="{% url 'add_income' %}">Daromad qo'shish</a>
+    <a href="{% url 'add_expense' %}">Xarajat qo'shish</a>
 
-    <h2>Graphs</h2>
+    <h2>Grafiklar</h2>
     <div class="chart-container">
         <canvas id="incomeChart" width="400" height="400"></canvas>
     </div>

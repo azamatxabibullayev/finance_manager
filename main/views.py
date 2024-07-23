@@ -13,7 +13,6 @@ import json
 def dashboard(request):
     transactions = Transaction.objects.filter(user=request.user)
 
-    # Calculate balance for each currency type
     balance_cash = Balance.objects.filter(
         user=request.user, currency__type__type=CurrencyType.CASH
     ).aggregate(Sum('amount'))['amount__sum'] or 0.00
@@ -21,8 +20,6 @@ def dashboard(request):
     balance_card = Balance.objects.filter(
         user=request.user, currency__type__type=CurrencyType.CARD
     ).aggregate(Sum('amount'))['amount__sum'] or 0.00
-
-    # Calculate overall balance
     overall_balance = balance_cash + balance_card
 
     today = timezone.now().date()
@@ -127,15 +124,13 @@ def income_stats(request, period):
 
     incomes = Income.objects.filter(user=request.user, date__range=[start_period, end_period])
     total_income = incomes.aggregate(Sum('amount'))['amount__sum'] or 0.00
-
-    # Group incomes by type and calculate total for each type
     incomes_by_type = incomes.values('income_type__name').annotate(total=Sum('amount')).order_by('-total')
 
     context = {
         'incomes': incomes,
         'total_income': total_income,
         'period': period,
-        'incomes_by_type': incomes_by_type,  # Add this to the context
+        'incomes_by_type': incomes_by_type,
     }
     return render(request, 'main/income_stats.html', context)
 
@@ -165,3 +160,28 @@ def expense_stats(request, period):
         'expenses_by_type': expenses_by_type,
     }
     return render(request, 'main/expense_stats.html', context)
+
+
+@login_required
+def stats(request):
+    selected_date_str = request.GET.get('date')
+    selected_date = None
+    incomes = []
+    expenses = []
+
+    if selected_date_str:
+        try:
+            selected_date = date.fromisoformat(selected_date_str)
+            incomes = Income.objects.filter(user=request.user, date=selected_date).select_related('income_type',
+                                                                                                  'currency')
+            expenses = Expense.objects.filter(user=request.user, date=selected_date).select_related('expense_type',
+                                                                                                    'currency')
+        except ValueError:
+            pass
+
+    context = {
+        'selected_date': selected_date_str,
+        'incomes': incomes,
+        'expenses': expenses,
+    }
+    return render(request, 'main/stats.html', context)

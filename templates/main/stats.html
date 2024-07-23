@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Stats{% endblock title %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <style>
+        #datepicker {
+            width: 200px;
+            margin: 20px;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .transaction-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .transaction-list li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <h1>Statistika</h1>
+    <h2>Sanani tanglang</h2>
+    <input type="text" id="datepicker" placeholder="Select a date">
+
+    {% if selected_date %}
+    <h2>{{ selected_date }} da bo'lgan tranzaksiyalar</h2>
+
+    <h3>Daromad</h3>
+    <ul class="transaction-list">
+        {% if incomes %}
+        {% for income in incomes %}
+        <li>
+            Amount: {{ income.amount }} {{ income.currency }}<br>
+            Type: {{ income.income_type }}<br>
+            Description: {{ income.description }}
+        </li>
+        {% endfor %}
+        {% else %}
+        <li>No incomes for this date.</li>
+        {% endif %}
+    </ul>
+
+    <h3>Xarajat</h3>
+    <ul class="transaction-list">
+        {% if expenses %}
+        {% for expense in expenses %}
+        <li>
+            Amount: {{ expense.amount }} {{ expense.currency }}<br>
+            Type: {{ expense.expense_type }}<br>
+            Description: {{ expense.description }}
+        </li>
+        {% endfor %}
+        {% else %}
+        <li>Bu sanada hech qanday tranzaksiya bo'lmagan.</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</div>
+
+<script>
+    $(function() {
+        $("#datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(dateText) {
+                window.location.href = '?date=' + dateText;
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
+{% endblock content %}

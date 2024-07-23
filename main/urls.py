@@ -7,4 +7,5 @@ urlpatterns = [
     path('add_expense/', views.add_expense, name='add_expense'),
     path('income_stats/<str:period>/', views.income_stats, name='income_stats'),
     path('expense_stats/<str:period>/', views.expense_stats, name='expense_stats'),
+    path('stats/', views.stats, name='stats'),
 ]
