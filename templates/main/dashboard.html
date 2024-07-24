@@ -1,27 +1,35 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock title %}
 {% block content %}
-<div class="content">
+<div class="dashboard-container">
     <h1>Dashboard</h1>
-    <p>Balance (Cash): {{ balance_cash }}</p>
-    <p>Balance (Card): {{ balance_card }}</p>
-    <p>Overall Balance: {{ overall_balance }}</p>
-
-    <h2>Xarajatlar</h2>
-    <p>Haftalik xarajatlar: {{ weekly_expenses }}</p>
-    <p>Oylik xarajatlar: {{ monthly_expenses }}</p>
-    <p>Yillik xarajatlar: {{ yearly_expenses }}</p>
-
-    <h2>Actions</h2>
-    <a href="{% url 'add_income' %}">Daromad qo'shish</a>
-    <a href="{% url 'add_expense' %}">Xarajat qo'shish</a>
-
-    <h2>Grafiklar</h2>
-    <div class="chart-container">
-        <canvas id="incomeChart" width="400" height="400"></canvas>
+    <div class="balance-section">
+        <p><strong>Balance (Cash):</strong> {{ balance_cash }}</p>
+        <p><strong>Balance (Card):</strong> {{ balance_card }}</p>
+        <p><strong>Overall Balance:</strong> {{ overall_balance }}</p>
     </div>
-    <div class="chart-container">
-        <canvas id="expenseChart" width="400" height="400"></canvas>
+
+    <div class="expenses-section">
+        <h2>Xarajatlar</h2>
+        <p><strong>Haftalik xarajatlar:</strong> {{ weekly_expenses }}</p>
+        <p><strong>Oylik xarajatlar:</strong> {{ monthly_expenses }}</p>
+        <p><strong>Yillik xarajatlar:</strong> {{ yearly_expenses }}</p>
+    </div>
+
+    <div class="actions-section">
+        <h2>Actions</h2>
+        <a href="{% url 'add_income' %}" class="action-button">Daromad qo'shish</a>
+        <a href="{% url 'add_expense' %}" class="action-button">Xarajat qo'shish</a>
+    </div>
+
+    <div class="charts-section">
+        <h2>Grafiklar</h2>
+        <div class="chart-container">
+            <canvas id="incomeChart" width="400" height="400"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="expenseChart" width="400" height="400"></canvas>
+        </div>
     </div>
 </div>
 
@@ -92,7 +100,42 @@
         }
     });
 </script>
+
 <style>
+    .dashboard-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .balance-section, .expenses-section, .actions-section, .charts-section {
+        margin-bottom: 20px;
+    }
+
+    .balance-section p, .expenses-section p {
+        font-size: 1.1em;
+        margin: 10px 0;
+    }
+
+    .action-button {
+        display: inline-block;
+        margin: 10px 5px;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .action-button:hover {
+        background-color: #0056b3;
+    }
+
     .chart-container {
         width: 100%;
         max-width: 400px;

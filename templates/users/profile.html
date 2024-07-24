@@ -2,14 +2,85 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<div>
-    <img src="{{ user.image.url }}">
-    <h2>Username: {{ user.username }}</h2>
-    <h3>Email: {{ user.email }}</h3>
-    <h3>First Name: {{ user.first_name }}</h3>
-    <h3>Last Name: {{ user.last_name }}</h3>
-    <button>
-        <a href="{% url 'users:edit_profile' %}">Edit Profile</a>
-    </button>
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="{{ user.image.url }}" class="profile-image" alt="{{ user.username }}">
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.email }}</p>
+    </div>
+    <div class="profile-details">
+        <h3>First Name: {{ user.first_name }}</h3>
+        <h3>Last Name: {{ user.last_name }}</h3>
+        <button class="edit-profile-button">
+            <a href="{% url 'users:edit_profile' %}">Edit Profile</a>
+        </button>
+    </div>
 </div>
 {% endblock %}
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .profile-header {
+        margin-bottom: 20px;
+    }
+
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
+
+    .profile-header h2 {
+        font-size: 1.8em;
+        margin: 10px 0;
+    }
+
+    .profile-header p {
+        font-size: 1em;
+        color: #666;
+    }
+
+    .profile-details {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .profile-details h3 {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    .edit-profile-button {
+        margin-top: 20px;
+        display: inline-block;
+        border: none;
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+    .edit-profile-button a {
+        text-decoration: none;
+        color: white;
+        display: inline-block;
+    }
+
+    .edit-profile-button:hover {
+        background-color: #0056b3;
+    }
+</style>

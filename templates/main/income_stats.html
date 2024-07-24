@@ -1,66 +1,112 @@
 {% extends "base.html" %}
 {% block title %}{{ period|capfirst }} Income Stats{% endblock title %}
 {% block content %}
-<div class="content">
+<div class="stats-container">
     <h1>{{ period|capfirst }} Income Stats</h1>
-    <p>Umumiy daromad: {{ total_income }}</p>
+    <p><strong>Umumiy daromad:</strong> {{ total_income }}</p>
 
-    <h2>Daromadlar</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for income in incomes %}
-        <tr>
-            <td>{{ income.date }}</td>
-            <td>{{ income.income_type.name }}</td>
-            <td>{{ income.amount }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="income-section">
+        <h2>Daromadlar</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for income in incomes %}
+            <tr>
+                <td>{{ income.date }}</td>
+                <td>{{ income.income_type.name }}</td>
+                <td>{{ income.amount }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <h2>Kategoriya bo'yicha daromadlar</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Category</th>
-            <th>Total Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for item in incomes_by_type %}
-        <tr>
-            <td>{{ item.income_type__name }}</td>
-            <td>{{ item.total }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="category-incomes-section">
+        <h2>Kategoriya bo'yicha daromadlar</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Total Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in incomes_by_type %}
+            <tr>
+                <td>{{ item.income_type__name }}</td>
+                <td>{{ item.total }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+    <a href="{% url 'dashboard' %}" class="back-link">Back to Dashboard</a>
 </div>
 
 <style>
+    .stats-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+    }
+
+    .stats-container p {
+        font-size: 1.1em;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .income-section, .category-incomes-section {
+        margin-bottom: 20px;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
     }
+
     table, th, td {
         border: 1px solid #ddd;
     }
+
     th, td {
         padding: 10px;
         text-align: left;
     }
+
     th {
         background-color: #f4f4f4;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #007BFF;
+        text-decoration: none;
+        text-align: center;
+        font-size: 1em;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
     }
 </style>
 {% endblock content %}

@@ -1,11 +1,66 @@
 {% extends 'base.html' %}
 
+{% block title %}Add Income{% endblock title %}
+
 {% block content %}
-<h2>Add Income</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-<a href="{% url 'dashboard' %}">Back to Dashboard</a>
-{% endblock %}
+<div class="form-container">
+    <h2>Add Income</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="form-button">Save</button>
+    </form>
+    <a href="{% url 'dashboard' %}" class="back-link">Back to Dashboard</a>
+</div>
+{% endblock content %}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form .form-button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 1em;
+    }
+
+    form .form-button:hover {
+        background-color: #218838;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #007BFF;
+        text-decoration: none;
+        text-align: center;
+        font-size: 1em;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
