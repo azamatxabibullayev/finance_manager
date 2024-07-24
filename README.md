@@ -11,11 +11,15 @@ Foydalanish uchun qadamlar(steps):
 7. python3 manage.py runserver
 
 
+
+
 Tayyor foydalanish uchun user account:
 
 username : azamat
 
 password : qwerty2005
+
+
 
 
 Admin paneldan foydalanish uchun:
