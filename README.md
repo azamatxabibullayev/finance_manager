@@ -13,9 +13,11 @@ Foydalanish uchun qadamlar(steps):
 
 Tayyor foydalanish uchun user account:
 username : azamat
+
 password : qwerty2005
 
 
 Admin paneldan foydalanish uchun:
 username : admin
+
 password : admin
